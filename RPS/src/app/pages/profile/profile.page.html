@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Profile
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-item lines="none">
+      <ion-avatar (click)="updateProfileImg()">
+        <img src="https://img.icons8.com/doodle/50/000000/user-male-circle.png">
+      </ion-avatar>
+      <ion-title> {{ username }}</ion-title>
+    </ion-item>
+  </ion-card>
+  <ion-row>
+    <ion-col>
+      <ion-card [routerLink]="['/contacts']">
+        <ion-card-header>
+          <ion-card-subtitle>
+            Contacts
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <img src="../../assets/img/marginalia-location-access.svg">
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col>
+      <ion-card [routerLink]="['/favorites']">
+        <ion-card-header>
+          <ion-card-subtitle>
+            Favorites
+          </ion-card-subtitle>    
+        </ion-card-header>
+        <ion-card-content>
+          <img src="../../assets/img/mirage-romantic-relationships.svg">
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-card [routerLink]="['/account']">
+        <ion-card-header>
+          <ion-card-subtitle>
+            Account
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <img src="../../assets/img/mirage-upgrade.svg">
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col>
+      <ion-card [routerLink]="['/about']">
+        <ion-card-header>
+          <ion-card-subtitle>
+            About
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <img src="../../assets/img/bermuda-coming-soon.svg">
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

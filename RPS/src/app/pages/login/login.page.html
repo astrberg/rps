@@ -1,0 +1,33 @@
+
+<ion-content force-overscroll="false">
+  <gl-background-video src="../../assets/video.mp4"></gl-background-video>
+  <ion-card class="welcome-card">
+    <ion-card-title color="light" class="ion-text-center ion-padding">
+      The Retired Phone Store
+    </ion-card-title>
+    <ion-card-content>
+
+        <ion-item>
+          <ion-input required [(ngModel)]="user.email" placeholder="Your Email" type="email"></ion-input>
+        </ion-item>
+       
+        <ion-item>
+          <ion-input required [(ngModel)]="user.password" placeholder="Your Password" type="password"></ion-input>
+        </ion-item>
+        <section class="ion-padding">
+          <ion-button expand="full" color="primary" (click)="login()" [disabled]="!user.email || !user.password">Login</ion-button>
+          <ion-text color="danger" text-center>{{error.error_msg}}</ion-text>
+          <ion-text color="success" text-center>{{error.success_msg}}</ion-text>
+        </section>
+        
+        <div class="dark-text">
+          <h2 class="ion-text-center">Don't have an account? <a [routerLink]="['/signup']">Sign up</a> today!</h2>
+          <h2 class="ion-text-center">Forgot password? <a [routerLink]="" (click)="resetPassword()">Reset Password</a></h2>
+        </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
+
+

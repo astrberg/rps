@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="backspace" defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Account</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-item class="ion-margin-top"> 
+        <ion-label position="stacked">Update Password</ion-label>
+        <ion-input required [(ngModel)]="currentPassword" placeholder="Your Old Password" type="password"></ion-input>
+        <ion-input required [(ngModel)]="newPassword" placeholder="Your New Password" type="password"></ion-input>
+      </ion-item>
+      <section class="ion-padding">
+        <ion-button color="dark" (click)="changePassword()">Update</ion-button>
+      </section>
+      <ion-text color="danger" text-center>{{error.error_msg}}</ion-text>
+      <ion-text color="success" text-center>{{error.success_msg}}</ion-text>
+    </ion-card-content>
+  </ion-card>
+  <ion-button class="ion-margin-horizontal" expand="full" color="danger" (click)="deleteUser()">Delete Account</ion-button>
+</ion-content>

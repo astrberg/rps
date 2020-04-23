@@ -1,0 +1,8 @@
+{
+  "name": "RPSApp",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}

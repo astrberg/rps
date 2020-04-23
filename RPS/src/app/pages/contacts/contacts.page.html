@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="backspace" defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Contacts</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item *ngFor="let chat of chats | async">
+    <ion-card [routerLink]="['/contacts/chat', chat.id]">
+      <ion-card-header>
+        <ion-card-title>{{ chat.sender }}</ion-card-title>
+        <ion-card-subtitle>{{ chat.created.toDate() }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        {{ chat.lastMessage }}
+      </ion-card-content>
+    </ion-card>
+  </ion-item>
+ 
+
+
+</ion-content>

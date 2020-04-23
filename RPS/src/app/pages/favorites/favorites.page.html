@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="backspace" defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Favorites</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+ <ion-card *ngFor="let post of favorites | async">
+  <ion-slides>
+    <ion-slide><img src={{post.imgUrl}} /></ion-slide>
+  </ion-slides>
+  <ion-card-content>
+    <ion-card-subtitle>$<ion-text color="danger">{{ post.price }}</ion-text> SOLD BY <a [routerLink]="" (click)="selectUser()"> {{post.user}}</a></ion-card-subtitle>
+    <ion-text>Location: {{ post.location }}, phone: {{ post.phone }}</ion-text>
+    <ion-segment>
+      <ion-segment-button (click)="buy(post.uid, post.user)">
+        <ion-label>Buy</ion-label>
+        <ion-icon name="basket"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button (click)="deleteFavorite(post.id)">
+        <ion-label>Remove</ion-label>
+        <ion-icon name="trash"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-card-content>
+ </ion-card>
+
+</ion-content>

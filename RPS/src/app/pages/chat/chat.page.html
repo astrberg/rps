@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="backspace" defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-group>
+      <ion-item *ngFor="let message of messages | async">
+        <ion-text slot="end">{{message.sender}}</ion-text>
+        <ion-label>
+          <h3>{{message.message}}</h3>
+          <p *ngIf="message.created">{{message.created.toDate()}}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-group>
+
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="light">
+    <ion-button (click)="reply()" [disabled]="!message" slot="end">Send</ion-button>
+    <ion-input type="text" [(ngModel)]="message"  placeholder="Lets get business done!"></ion-input>
+  </ion-toolbar>
+</ion-footer>

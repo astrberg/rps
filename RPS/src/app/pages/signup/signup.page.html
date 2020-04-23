@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button icon="backspace" defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sign Up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <ion-item class="ion-margin-top">
+        <ion-label position="stacked">Email <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required [(ngModel)]="user.email" placeholder="Your Email" type="email"></ion-input>
+      </ion-item>
+      <ion-item class="ion-margin-top"> 
+        <ion-label position="stacked">Password <ion-text color="danger">*</ion-text></ion-label>
+        <ion-input required [(ngModel)]="user.password" placeholder="Your Password" type="password"></ion-input>
+      </ion-item>
+      <section class="ion-padding">
+        <ion-button color="dark" (click)="signup()" [disabled]="!user.email || !user.password">Sign up</ion-button>
+        <ion-button color="medium" [routerLink]="['']" >Cancel</ion-button>
+      </section>
+      <ion-text color="error" text-center>{{error.error_msg}}</ion-text>
+      <ion-text color="success" text-center>{{error.success_msg}}</ion-text>
+
+    </ion-card-content>
+  </ion-card>
+ 
+</ion-content>
