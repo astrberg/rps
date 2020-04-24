@@ -4,7 +4,7 @@
 > https://cs458-rps.firebaseapp.com/login
 
 
-![](https://media.giphy.com/media/KbB8vTEr59PEN5prXa/giphy.gif)
+![](./demo.gif)
 
 
 ## Meta
