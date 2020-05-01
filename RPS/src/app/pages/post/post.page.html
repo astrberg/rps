@@ -11,7 +11,7 @@
   <ion-card>
     <ion-item class="ion-margin-top">
       <ion-label position="stacked">Price <ion-text color="danger">*</ion-text></ion-label>
-      <ion-input [(ngModel)]="post.price" required placeholder="Set Price in USD" type="number"></ion-input>
+      <ion-input [(ngModel)]="post.price" required placeholder="Set Price in USD" type="number" min="0"></ion-input>
     </ion-item>
     <ion-item class="ion-margin-top">
       <ion-label position="stacked">Phone number</ion-label>
@@ -34,6 +34,14 @@
     <ion-item class="ion-margin-top">
       <ion-label position="stacked">Image URL</ion-label>
       <ion-input [(ngModel)]="post.imgUrl" required placeholder="URL"></ion-input>
+    </ion-item>
+    <ion-item class="ion-margin-top">
+      <ion-label >Upload image</ion-label>
+      <ion-input type="file" (change)="uploadImage($event.target.files)" accept="image/png, image/jpeg"></ion-input>
+      <progress max="100" [value]="(uploadPercent | async)"></progress>
+    </ion-item>
+    <ion-item class="ion-margin-top">
+      <ion-button>Take image</ion-button>
     </ion-item>
     <section class="ion-padding">
       <ion-button (click)="addPost()" [disabled]="!post.price || !post.location">Post</ion-button>

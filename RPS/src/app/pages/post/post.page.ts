@@ -2,9 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FireStoreService } from '../../../services/db/firestore.service';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { Post } from '../../../services/db/model/post';
 import { Error } from '../../../services/db/model/error';
-
+import { Observable } from 'rxjs';
+import { ActionSheetController, ToastController, Platform, LoadingController } from '@ionic/angular';
+import { Camera, PictureSourceType } from '@ionic-native/camera/ngx';
+import { finalize, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-post',
@@ -12,7 +16,13 @@ import { Error } from '../../../services/db/model/error';
   styleUrls: ['./post.page.scss'],
 })
 export class PostPage implements OnInit {
+  private fileSize:number;
+  private task: AngularFireUploadTask;
+  private uploadPercent: Observable<number>;
+  private snapshot: Observable<any>;
+  private url: Observable<string>;
 
+  
   private post: Post = {
     created: null,
     uid: null,
@@ -32,6 +42,9 @@ export class PostPage implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private store: FireStoreService,
+    private storage: AngularFireStorage,
+    private actionSheetController: ActionSheetController,
+    private camera: Camera,
     ) { }
 
   ngOnInit() {
@@ -55,15 +68,54 @@ export class PostPage implements OnInit {
 
     });
   }
+  uploadImage(event: FileList) {
+    const file = event.item(0);
+    const path = `${new Date().getTime()}_${file.name}`;
+    if (file.type.split('/')[0] !== 'image') {
+        console.error("Please provide a valid file type");
+        return;
+    }
+    
+    this.task = this.storage.upload(path, file);
+    this.uploadPercent = this.task.percentageChanges();
+    this.snapshot = this.task.snapshotChanges().pipe(
+        finalize(() => {
+            this.url = this.storage.ref(path).getDownloadURL();
 
-  async uploadImage() {
-    const alert = await this.alertController.create({
-      message: 'Upload image',
-      buttons: ['Ok']
-    });
+            this.url.subscribe(res => {
+                this.store.addImage({name: file.name, filepath: res, size: this.fileSize});
+            })
+        }),
+        tap(snap => {
+            this.fileSize = snap.totalBytes;    
+        })
+    )
 
-    await alert.present();
-  }
+}
+
+  // uploadImage(event) {
+    // const actionSheet = await this.actionSheetController.create({
+    //   header: "Select Image source",
+    //   buttons: [{
+    //           text: 'Load from Library',
+    //           handler: () => {
+    //               this.camera.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+    //           }
+    //       },
+    //       {
+    //           text: 'Use Camera',
+    //           handler: () => {
+    //               this.camera.getPicture(this.camera.PictureSourceType.CAMERA);
+    //           }
+    //       },
+    //       {
+    //           text: 'Cancel',
+    //           role: 'cancel'
+    //       }
+    //   ]
+    // });
+    // await actionSheet.present();
+  // }
 
   async takeImg() {
     const alert = await this.alertController.create({
