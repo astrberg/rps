@@ -18,6 +18,9 @@ export class FireStoreService {
         return this.afs.collection<Image>(`users/${this.auth.getUID()}/images`).add(image);
     
     }
+    removeImage(id) {
+        return this.afs.collection<Image>(`users/${this.auth.getUID()}/images`).doc(id).delete();
+    }
 
     getPosts() {
         return this.afs.collection<Post>('posts', ref => ref.orderBy('created', 'desc')).valueChanges({ idField: 'id' });
