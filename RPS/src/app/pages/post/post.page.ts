@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FireStoreService } from '../../../services/db/firestore.service';
 import { AngularFireStorage, AngularFireUploadTask, AngularFireStorageReference } from '@angular/fire/storage';
 import { Post } from '../../../services/db/model/post';
 import { Error } from '../../../services/db/model/error';
 import { Observable } from 'rxjs';
-import { ActionSheetController, ToastController, Platform, LoadingController } from '@ionic/angular';
-import { Camera, PictureSourceType } from '@ionic-native/camera/ngx';
 import { finalize, tap, map } from 'rxjs/operators';
-import { DocumentReference } from '@angular/fire/firestore/interfaces';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-post',
@@ -17,14 +14,14 @@ import { DocumentReference } from '@angular/fire/firestore/interfaces';
   styleUrls: ['./post.page.scss'],
 })
 export class PostPage implements OnInit {
-  private fileSize: number;
-  private task: AngularFireUploadTask;
-  private fileRef: AngularFireStorageReference;
-  private uploadURL: Observable<string>;
-  private docRef: string;
-
-
-  private post: Post = {
+  fileSize: number;
+  task: AngularFireUploadTask;
+  fileRef: AngularFireStorageReference;
+  uploadURL: Observable<string>;
+  uploadState: string;
+  docRef: string;
+  
+  post: Post = {
     created: null,
     uid: null,
     user: null,
@@ -34,19 +31,16 @@ export class PostPage implements OnInit {
     location: null,
   };
 
-  private error: Error = {
+  error: Error = {
     error_msg: '',
     success_msg: ''
   }
 
   constructor(
-    private alertController: AlertController,
     private router: Router,
     private store: FireStoreService,
     private storage: AngularFireStorage,
-    private actionSheetController: ActionSheetController,
-    private camera: Camera,
-  ) { }
+    ) { }
 
   ngOnInit() {
   }
@@ -73,7 +67,7 @@ export class PostPage implements OnInit {
     const file = event.item(0);
 
     if (file.type.split('/')[0] !== 'image') {
-      alert("Please provide a valid file type");
+      alert("Please provide a valid file type, either jpg or png");
       return;
     }
     const name = `${new Date().getTime()}_${file.name}`;
@@ -81,7 +75,13 @@ export class PostPage implements OnInit {
 
 
     this.task = this.storage.upload(name, file);
+    // this.uploadState = this.task.snapshotChanges().pipe(map(s => s.state));
     this.task.snapshotChanges().pipe(
+      map((s => {
+        // this.uploadState = s.state;
+        console.log(s.state)
+        this.fileSize = s.totalBytes;
+      })),
       finalize(() => {
         this.uploadURL = this.fileRef.getDownloadURL();
         this.uploadURL.subscribe(res => {
@@ -95,13 +95,11 @@ export class PostPage implements OnInit {
               this.removeImage();
             })
         })
-      }),
-      tap(snap => {
-        this.fileSize = snap.totalBytes;
       })
     )
       .subscribe()
   }
+
   removeImage() {
     return this.fileRef.delete().subscribe(() => {
       this.store.removeImage(this.docRef).catch((err) => console.error("Failed to delete image from document store", err))
@@ -109,38 +107,6 @@ export class PostPage implements OnInit {
       this.docRef = null;
     },
       (err) => console.error("Failed to delete image from storage", err));
-  }
-  // uploadImage(event) {
-  // const actionSheet = await this.actionSheetController.create({
-  //   header: "Select Image source",
-  //   buttons: [{
-  //           text: 'Load from Library',
-  //           handler: () => {
-  //               this.camera.getPicture(this.camera.PictureSourceType.PHOTOLIBRARY);
-  //           }
-  //       },
-  //       {
-  //           text: 'Use Camera',
-  //           handler: () => {
-  //               this.camera.getPicture(this.camera.PictureSourceType.CAMERA);
-  //           }
-  //       },
-  //       {
-  //           text: 'Cancel',
-  //           role: 'cancel'
-  //       }
-  //   ]
-  // });
-  // await actionSheet.present();
-  // }
-
-  async takeImg() {
-    const alert = await this.alertController.create({
-      message: 'Access phone API and take image',
-      buttons: ['Ok']
-    });
-
-    await alert.present();
   }
 
 

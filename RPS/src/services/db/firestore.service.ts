@@ -7,7 +7,6 @@ import { Chat } from "./model/chat";
 import { Image } from "./model/image"
 import { AuthService } from '../auth.service';
 import * as firebase from 'firebase'
-import { sha256 } from 'crypto-js/sha256';
 
 @Injectable()
 export class FireStoreService {

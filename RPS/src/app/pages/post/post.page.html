@@ -32,21 +32,20 @@
       </ion-select>
     </ion-item>
     <ion-item class="ion-margin-top">
-      <ion-label position="stacked">Image URL</ion-label>
-      <ion-input [(ngModel)]="post.imgUrl" required placeholder="URL"></ion-input>
-    </ion-item>
-    <ion-item class="ion-margin-top">
       <ion-label >Upload image</ion-label>
       <ion-input type="file" (change)="uploadImage($event.target.files)" accept="image/png, image/jpeg"></ion-input>
     </ion-item>
-    <ion-item *ngIf="uploadURL | async;">
-      <ion-text color="success" text-center>
+    <ion-item *ngIf="uploadState | async; let state">
+      <ion-text *ngIf="state === 'running'" color="success" text-center>
+        Processing...
+      </ion-text>
+      <ion-text *ngIf="state === 'success'" color="success" text-center>
         Uploaded!
       </ion-text>
+      <ion-text *ngIf="state === 'error'" color="error" text-center>
+        Something went wrong :(
+      </ion-text>
       <ion-icon color="error" text-center name="close" (click)="removeImage()"></ion-icon>
-    </ion-item>
-    <ion-item class="ion-margin-top">
-      <ion-button>Take image</ion-button>
     </ion-item>
     <section class="ion-padding">
       <ion-button (click)="addPost()" [disabled]="!post.price || !post.location">Post</ion-button>
